@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 //require basicAuth
 const basicAuth = require("express-basic-auth");
 //require bcrypt
@@ -14,6 +15,7 @@ const app = express();
 
 // specify out request bodies are json
 app.use(express.json());
+app.use(cors());
 
 // ROUTES GO HERE
 
