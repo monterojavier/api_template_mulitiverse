@@ -32,6 +32,16 @@ app.get("/api/users", async (req, res) => {
   }
 });
 
+// GET SPECIFIC USERS
+app.get("/api/users/:userId", async (req, res) => {
+  try {
+    const user = await User.findByPk(req.params.userId);
+    res.send(user);
+  } catch (err) {
+    res.sendStatus(500);
+  }
+});
+
 app.listen(3000, () => {
   console.log("Server running on port 3000");
 });
