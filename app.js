@@ -42,6 +42,16 @@ app.get("/api/users/:userId", async (req, res) => {
   }
 });
 
+// POST NEW USER
+app.post("/api/users", async (req, res) => {
+  try {
+    const newUser = await User.create(req.body);
+    res.json({newUser});
+  } catch (err) {
+    res.sendStatus(500);
+  }
+});
+
 app.listen(3000, () => {
   console.log("Server running on port 3000");
 });
