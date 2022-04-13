@@ -22,6 +22,16 @@ app.get("/", (req, res) => {
   res.send("<h1>App Running</h1>");
 });
 
+// GET ALL USERS
+app.get("/api/users", async (req, res) => {
+  try {
+    const users = await User.findAll();
+    res.json({users});
+  } catch (err) {
+    res.sendStatus(500);
+  }
+});
+
 app.listen(3000, () => {
   console.log("Server running on port 3000");
 });
