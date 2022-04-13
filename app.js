@@ -52,6 +52,17 @@ app.post("/api/users", async (req, res) => {
   }
 });
 
+app.put("/api/users/:userId", async (req, res) => {
+  try {
+    let updatedUser = await User.update(req.body, {
+      where: {id: req.params.userId},
+    });
+    res.json({updatedUser});
+  } catch (err) {
+    res.sendStatus(500);
+  }
+});
+
 app.listen(3000, () => {
   console.log("Server running on port 3000");
 });
