@@ -61,6 +61,28 @@ app.post("/api/users", async (req, res) => {
   });
 });
 
+// Example of bcrypt compare - not best practices
+// This needs to be a post because we are sending user info in a req.body
+app.post("/session", async (req, res) => {
+  // Find a user in the db by matching the name in the req.body
+  const thisUser = await User.findOne({
+    where: {name: req.body.name},
+  });
+
+  if (!thisUser) {
+    res.send("User not found");
+  } else {
+    // If found, compare that user's password to the hssh in the db
+    bcrypt.compare(req.body.password, thisUser.password, async (err, same) => {
+      if (same) {
+        res.send(`Logged in as , ${thisUser.name}`);
+      } else {
+        res.send("Passwords do not match");
+      }
+    });
+  }
+});
+
 app.put("/api/users/:userId", async (req, res) => {
   try {
     let updatedUser = await User.update(req.body, {
