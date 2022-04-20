@@ -46,12 +46,19 @@ app.get("/api/users/:userId", async (req, res) => {
 
 // POST NEW USER
 app.post("/api/users", async (req, res) => {
-  try {
-    const newUser = await User.create(req.body);
-    res.json({newUser});
-  } catch (err) {
-    res.sendStatus(500);
-  }
+  bcrypt.hash(req.body.password, 2, async function (err, encrypted) {
+    try {
+      if (err) throw err;
+      // Create a new user, storing the hashed password
+      const newUser = await User.create({
+        user: req.body.user,
+        password: encrypted,
+      });
+      res.json({newUser});
+    } catch (err) {
+      res.send(err);
+    }
+  });
 });
 
 app.put("/api/users/:userId", async (req, res) => {
