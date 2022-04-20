@@ -51,7 +51,7 @@ app.post("/api/users", async (req, res) => {
       if (err) throw err;
       // Create a new user, storing the hashed password
       const newUser = await User.create({
-        user: req.body.user,
+        name: req.body.name,
         password: encrypted,
       });
       res.json({newUser});
