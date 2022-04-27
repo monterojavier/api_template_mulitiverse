@@ -94,6 +94,21 @@ app.put("/api/users/:userId", async (req, res) => {
   }
 });
 
+app.delete("/api/users/:userId", async (req, res, next) => {
+  try {
+    const userId = req.params.userId;
+    await User.destroy({
+      where: {
+        id: userId,
+      },
+    });
+
+    res.status(204).json("deleted user from database");
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.listen(3000, () => {
   console.log("Server running on port 3000");
 });
