@@ -17,6 +17,32 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+// CONFIGURE BASIC AUTH
+app.use(
+  basicAuth({
+    authorizer: dbauthorizer,
+    authorizeAsync: true,
+    unauthorizedResponse: () => "You do not have access to this endpoint",
+  }),
+);
+
+// AUTHORIZATION
+async function dbauthorizer(username, password, callback) {
+  try {
+    // Get matching user from db
+    const user = await User.findOne({where: {name: username}});
+    // If username is valid, compare passwords
+    let isValid =
+      user != null ? await bcrypt.compare(password, user.password) : false;
+
+    console.log("Username and password match? ", isValid);
+    callback(null, isValid);
+  } catch (error) {
+    console.log("Error: ", error);
+    callback(null, false);
+  }
+}
+
 // ROUTES GO HERE
 
 // GET
